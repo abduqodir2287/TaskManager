@@ -1,0 +1,13 @@
+version: "2.24.6"
+
+services:
+  taskmanager:
+    build: .
+    volumes:
+      - .:/src
+    command: uvicorn src.main:app --host ${APP_HOST} --port ${DOCKER_COMPOSE_PORT}
+    ports:
+      - "${APP_PORT}:${DOCKER_COMPOSE_PORT}"
+    restart: always
+    env_file:
+      - .env
