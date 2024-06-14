@@ -2,7 +2,7 @@ from sqlalchemy import MetaData, select, delete, update
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
 from src.config import settings
-from src.domain.tasks.schema import TasksModel
+from src.domain.tasks.schema import TasksModel, TasksModelForPut
 from src.domain.database.tasks.table import table
 
 class TaskManagerDb:
@@ -56,7 +56,7 @@ class TaskManagerDb:
 					return tasks
 				return None
 
-	async def update_task_by_id(self, task_id: int, task: TasksModel):
+	async def update_task_by_id(self, task_id: int, task: TasksModelForPut):
 		async with AsyncSession(self.engine) as session:
 			async with session.begin():
 				update_task = update(self.tasks_table).where(self.tasks_table.c.id == task_id).values(

@@ -13,6 +13,11 @@ class TasksModel(BaseModel):
     description: Optional[str] = Field(default=None, description="The description of the task")
     status: TaskStatus = Field(description="The status of the task")
 
+class TasksModelForPut(BaseModel):
+    title: Optional[str] = Field(default=None, description="The title of the task")
+    description: Optional[str] = Field(default=None, description="The description of the task")
+    status: Optional[TaskStatus] = Field(default=None, description="The status of the task")
+
 
 class TaskResponse(BaseModel):
     result: str

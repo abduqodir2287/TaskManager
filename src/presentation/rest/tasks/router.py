@@ -35,8 +35,8 @@ async def add_task(
 @router.put("/{task_id}", response_model=TaskResponseForPut, status_code=status.HTTP_200_OK)
 async def update_task(
     task_id: int,
-    title: str = Query(..., description="The title of the task"),
-    description: Optional[str] = Query(None, description="The description of the task"),
-    task_status: TaskStatus = Query(..., description="The status of the task")
+    title: Optional[str] = Query(default=None, description="The title of the task"),
+    description: Optional[str] = Query(default=None, description="The description of the task"),
+    task_status: TaskStatus = Query(default=None, description="The status of the task")
 ) -> TaskResponseForPut:
 	return await service.update_task_service(task_id, title, description, task_status)
