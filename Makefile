@@ -1,5 +1,5 @@
 run:
-	uvicorn src.main:app --reload --port 8013
+	uvicorn src.main:app --reload --port 8000
 
 req:
 	pip freeze > requirements.txt
