@@ -44,7 +44,6 @@ class TaskManagerDb:
 				result = await session.execute(delete_task)
 				if result.rowcount > 0:
 					return True
-				return None
 
 	async def select_task_by_id(self, task_id: int):
 		async with AsyncSession(self.engine) as session:
@@ -54,7 +53,6 @@ class TaskManagerDb:
 				tasks = result.fetchall()
 				if tasks:
 					return tasks
-				return None
 
 	async def update_task_by_id(self, task_id: int, task: TasksModelForPut):
 		async with AsyncSession(self.engine) as session:
@@ -69,5 +67,4 @@ class TaskManagerDb:
 				row = result.first()
 				if row:
 					return {"created_at": row.created_at, "updated_at": row.updated_at}
-				return None
 

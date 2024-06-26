@@ -1,13 +1,26 @@
-version: "2.24.6"
+version: "2"
 
 services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/data
+
   taskmanager:
     build: .
     volumes:
       - .:/src
-    command: uvicorn src.main:app --host ${APP_HOST} --port ${DOCKER_COMPOSE_PORT}
+    command: uvicorn src.main:app --host ${APPLICATION_HOST} --port ${DOCKER_EXPOSED_PORT}
     ports:
-      - "${APP_PORT}:${DOCKER_COMPOSE_PORT}"
+      - "${APPLICATION_PORT}:${DOCKER_EXPOSED_PORT}"
     restart: always
     env_file:
       - .env
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:

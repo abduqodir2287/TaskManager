@@ -1,8 +1,5 @@
-test_run:
-	python main.py
-
 run:
-	uvicorn src.main:app --reload --port 8012
+	uvicorn src.main:app --reload --port 8013
 
 req:
 	pip freeze > requirements.txt
@@ -10,8 +7,14 @@ req:
 test:
 	python -m pytest
 
-doc:
+up:
 	docker-compose up --build
+
+down:
+	docker-compose down
 
 git:
 	git status
+
+cli:
+	redis-cli

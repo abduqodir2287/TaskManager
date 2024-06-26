@@ -70,3 +70,5 @@ media/
 
 crud_for_tasks.py
 /main.py
+/lesson_redis.py
+TaskManager.db

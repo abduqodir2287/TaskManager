@@ -1,6 +1,10 @@
 /Makefile
-/.env_example
+/.env.example
 /crud_for_tasks.py
 /README.md
 /tests
 /.pytest_cache
+/.gitignore
+/lesson_redis.py
+/main.py
+TaskManager.db

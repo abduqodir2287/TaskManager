@@ -1,21 +1,23 @@
-from datetime import datetime
 from typing import Optional
 from fastapi import HTTPException, Query
 
 from src.domain.tasks.schema import TasksModel, TaskStatus, TasksModelForPut
 from src.domain.database.tasks.create_db import db
+from src.domain.redis_for_tasks.services import RedisClient
+from src.domain.tasks.tasks_functions import ServiceFunctions
 
 class TaskRouterService:
+    def __init__(self):
+        self.redis_client = RedisClient()
+        self.functions = ServiceFunctions()
 
     async def get_tasks_service(self):
-        all_tasks = await self.response_tasks_service()
+        all_tasks = await self.functions.response_tasks_service()
         return {"Tasks": all_tasks}
 
     async def get_task_by_id_service(self, task_id: int):
         try:
-            task = await self.response_task_by_id_service(task_id)
-            if task is None:
-                raise HTTPException(status_code=422, detail="Task not found")
+            task = await self.functions.response_task_by_id_service(task_id)
             return task
         except Exception as e:
             raise HTTPException(status_code=422, detail=str(e))
@@ -40,7 +42,7 @@ class TaskRouterService:
                 status=task_status
             )
             insert_response = await db.insert_task(task)
-            result = await self.add_id_service(insert_response[0], insert_response[1], task)
+            result = await self.functions.add_id_service(insert_response[0], insert_response[1], task)
             return result
         except Exception as e:
             raise HTTPException(status_code=422, detail=str(e))
@@ -63,60 +65,11 @@ class TaskRouterService:
                     status=task_status if task_status is not None else existing_task.status
                 )
                 update = await db.update_task_by_id(task_id, task)
-                result = await self.put_response_service(task_id, update["created_at"], update["updated_at"], task)
+                result = await self.functions.put_response_service(
+                    task_id, update["created_at"],
+                    update["updated_at"], task
+                )
                 return result
         except Exception as e:
             raise HTTPException(status_code=422, detail=str(e))
-
-
-    async def add_id_service(self, id: int, created_at: datetime, task: TasksModel):
-        return {
-            "result": "Task added",
-            "id": id,
-            "title": task.title,
-            "description": task.description,
-            "status": task.status,
-            "created_at": created_at
-        }
-
-    async def put_response_service(self, id: int, created_at: datetime, updated_at: datetime, task: TasksModelForPut):
-        return {
-            "result": "Task updated",
-            "id": id,
-            "title": task.title,
-            "description": task.description,
-            "status": task.status,
-            "created_at": created_at,
-            "updated_at": updated_at,
-        }
-
-    async def response_tasks_service(self):
-        tasks = await db.select_all_tasks()
-        tasks_list = []
-        for task in tasks:
-            all_tasks = {
-                "id": task[0],
-                "title": task[1],
-                "description": task[2],
-                "status": task[3],
-                "created_at": task[4],
-                "updated_at": task[5]
-            }
-            tasks_list.append(all_tasks)
-        return tasks_list
-
-    async def response_task_by_id_service(self, task_id: int) -> object:
-        task = await db.select_task_by_id(task_id)
-        if task is None:
-            return None
-        for task_by_task_id in task:
-            returned_task = {
-                "id": task_by_task_id[0],
-                "title": task_by_task_id[1],
-                "description": task_by_task_id[2],
-                "status": task_by_task_id[3],
-                "created_at": task_by_task_id[4],
-                "updated_at": task_by_task_id[5],
-            }
-            return returned_task
 

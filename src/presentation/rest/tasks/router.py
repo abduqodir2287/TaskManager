@@ -4,12 +4,12 @@ from fastapi import APIRouter, status, Query
 from src.domain.tasks.schema import AllTasks, TaskResponseForGet, TaskStatus, TaskResponse, TaskResponseForPut
 from src.domain.tasks.services import TaskRouterService
 
-router = APIRouter(prefix="/tasks", tags=["Task"])
+router = APIRouter(prefix="/Tasks", tags=["Task"])
 
 service = TaskRouterService()
 
 
-@router.get("/", response_model=AllTasks, status_code=status.HTTP_200_OK)
+@router.get("", response_model=AllTasks, status_code=status.HTTP_200_OK)
 async def get_task() -> AllTasks:
 	return await service.get_tasks_service()
 
@@ -24,7 +24,7 @@ async def delete_task(task_id: int):
 	return await service.delete_task_service(task_id)
 
 
-@router.post("/", response_model=TaskResponse, status_code=status.HTTP_200_OK)
+@router.post("", response_model=TaskResponse, status_code=status.HTTP_200_OK)
 async def add_task(
     title: str = Query(..., description="The title of the task"),
     description: Optional[str] = Query(None, description="The description of the task"),
