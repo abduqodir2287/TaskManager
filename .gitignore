@@ -68,7 +68,11 @@ media/
 # Tests For Tasks Router
 .pytest_cache
 
-crud_for_tasks.py
+/.ruff_cache
+
+/crud_for_tasks.py
 /main.py
 /lesson_redis.py
-TaskManager.db
+/py_log.log
+/logirovaniya.py
+/tasks_log.log

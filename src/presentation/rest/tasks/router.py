@@ -20,7 +20,7 @@ async def get_task_by_id(task_id: int) -> TaskResponseForGet:
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_task(task_id: int):
+async def delete_task(task_id: int) -> None:
 	return await service.delete_task_service(task_id)
 
 

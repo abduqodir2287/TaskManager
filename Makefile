@@ -1,5 +1,5 @@
 run:
-	uvicorn src.main:app --reload --port 8000
+	uvicorn src.main:app --reload --port 8003
 
 req:
 	pip freeze > requirements.txt
@@ -18,3 +18,9 @@ git:
 
 cli:
 	redis-cli
+
+ruff:
+	ruff check
+
+fix:
+	ruff check --fix

@@ -1,6 +1,18 @@
 version: "2"
 
 services:
+  taskmanagerdb:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - taskmanagerdb:/var/lib/postgresql/data/
+    restart: always
+
   redis:
     image: redis:latest
     container_name: redis
@@ -8,6 +20,8 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     volumes:
       - redis_data:/data
+    depends_on:
+      - taskmanagerdb
 
   taskmanager:
     build: .
@@ -20,7 +34,9 @@ services:
     env_file:
       - .env
     depends_on:
+      - taskmanagerdb
       - redis
 
 volumes:
+  taskmanagerdb: null
   redis_data:

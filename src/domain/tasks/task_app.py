@@ -5,7 +5,7 @@ from src.domain.database.tasks.create_db import db
 from src.domain.tasks.schema import GreetingsResponse
 
 @asynccontextmanager
-async def lifespan_app(app: FastAPI):
+async def lifespan_app(my_app: FastAPI):
 	await db.create_table()
 	yield
 
