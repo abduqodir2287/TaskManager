@@ -1,26 +1,14 @@
-run:
-	uvicorn src.main:app --reload --port 8003
-
-req:
-	pip freeze > requirements.txt
+todo-run:
+	uvicorn src.main:app --reload --port 8004
 
 test:
 	python -m pytest
 
 up:
-	docker-compose up --build
+	docker-compose up -d --build
 
 down:
 	docker-compose down
 
-git:
-	git status
-
-cli:
-	redis-cli
-
-ruff:
-	ruff check
-
-fix:
+linet:
 	ruff check --fix

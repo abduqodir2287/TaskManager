@@ -11,7 +11,7 @@ services:
       - ${POSTGRES_PORT}:5432
     volumes:
       - taskmanagerdb:/var/lib/postgresql/data/
-    restart: always
+    restart: on-failure
 
   redis:
     image: redis:latest
@@ -22,20 +22,23 @@ services:
       - redis_data:/data
     depends_on:
       - taskmanagerdb
+    restart: on-failure
 
   taskmanager:
     build: .
     volumes:
       - .:/src
-    command: uvicorn src.main:app --host ${APPLICATION_HOST} --port ${DOCKER_EXPOSED_PORT}
+    command: uvicorn src.main:app --host ${APPLICATION_HOST} --port ${DOCKER_EXPOSED_PORT} --reload
     ports:
       - "${APPLICATION_PORT}:${DOCKER_EXPOSED_PORT}"
-    restart: always
     env_file:
       - .env
     depends_on:
       - taskmanagerdb
       - redis
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
+    restart: on-failure
 
 volumes:
   taskmanagerdb: null

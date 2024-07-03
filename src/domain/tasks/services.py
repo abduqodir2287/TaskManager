@@ -1,11 +1,12 @@
 from typing import Optional
 from fastapi import HTTPException, Query, status
 
-from src.domain.tasks.schema import TasksModel, TaskStatus, TaskResponseForGet, TaskResponse, TaskResponseForPut
-from src.domain.database.tasks.create_db import db
-from src.domain.redis_for_tasks.services import RedisClient
+from src.domain.tasks.schema import TasksModel, TaskStatus, TaskResponseForGet, TaskResponse, TaskResponseForPut, \
+    AllTasks
+from src.infrastructure.database.postgres.tasks.create_db import db
+from src.infrastructure.database.redis.client import RedisClient
 from src.domain.tasks.tasks_functions import TaskServiceFunctions
-from src.domain.tasks.logger_setup import logger
+from src.configs.logger_setup import logger
 
 class TaskRouterService:
     def __init__(self) -> None:
@@ -13,16 +14,16 @@ class TaskRouterService:
         self.functions = TaskServiceFunctions()
         self.logger = logger
 
-    async def get_tasks_service(self) -> dict[str, list]:
+    async def get_tasks_service(self) -> AllTasks:
         all_tasks = await self.functions.get_all_task_function()
-        self.logger.info("Tasks submitted successfully")
+        self.logger.info("Tasks sent successfully")
 
-        return {"Tasks": all_tasks}
+        return AllTasks(Tasks=all_tasks)
 
     async def get_task_by_id_service(self, task_id: int) -> TaskResponseForGet:
         try:
             task = await self.functions.get_by_id_function(task_id)
-            self.logger.info("Tasks submitted successfully")
+            self.logger.info("Tasks sent successfully")
 
             return task
 
@@ -30,7 +31,7 @@ class TaskRouterService:
             raise e
 
         except Exception as e:
-            self.logger.error(f"The error is a {e}")
+            self.logger.error(f"The error is a: {e}")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
     async def delete_task_service(self, task_id: int) -> None:

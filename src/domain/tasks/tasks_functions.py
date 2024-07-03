@@ -7,9 +7,9 @@ import json
 
 from src.domain.tasks.schema import TaskResponse, TaskStatus, TaskResponseForPut
 from src.domain.tasks.schema import TasksModel, TasksModelForPut, TaskResponseForGet
-from src.domain.database.tasks.create_db import db
-from src.domain.tasks.logger_setup import logger
-from src.domain.redis_for_tasks.services import RedisClient
+from src.infrastructure.database.postgres.tasks.create_db import db
+from src.configs.logger_setup import logger
+from src.infrastructure.database.redis.client import RedisClient
 
 
 class TaskServiceFunctions:

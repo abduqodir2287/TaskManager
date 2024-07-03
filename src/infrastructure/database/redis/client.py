@@ -1,7 +1,7 @@
 from redis import Redis
 
-from src.domain.database.tasks.create_db import db
-from src.config import settings
+from src.infrastructure.database.postgres.tasks.create_db import db
+from src.configs.config import settings
 
 
 # При запуске проекта в Docker,
@@ -28,15 +28,19 @@ class RedisClient:
 		if self.redis_client.exists(name):
 			return self.redis_client.hgetall(name)
 
+
 	def get(self, name: str | int) -> str:
 		if self.redis_client.exists(name):
 			return self.redis_client.get(name)
 
+
 	def get_keys(self) -> list:
 		return self.redis_client.keys("*")
 
+
 	def delete(self, name: str | int) -> None:
 		self.redis_client.delete(name)
+
 
 	def exist(self, name: str | int) -> bool | None:
 		if self.redis_client.exists(name):

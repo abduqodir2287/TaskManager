@@ -2,29 +2,24 @@ from sqlalchemy import MetaData, select, delete, update
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.engine.row import Row
 
-from src.config import settings
+from src.configs.config import settings
 from src.domain.tasks.schema import TasksModel, TasksModelForPut
-from src.domain.database.tasks.table import table
-from src.domain.tasks.logger_setup import logger
+from src.infrastructure.database.postgres.tasks.table import task_table
+from src.configs.logger_setup import logger
 
-# При запуске проекта в Docker,
-# Замените settings.POSTGRES_HOST на settings.POSTGRES_DOCKER_HOST.
 
 class TaskManagerDb:
 	def __init__(self, table_name: str):
 		self.table_name = table_name
-		self.db_url = f"postgresql+asyncpg://{settings.POSTGRES_USER}:" \
-		              f"{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:" \
-		              f"{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+		self.db_url = settings.DATABASE_URL
 		self.engine = create_async_engine(self.db_url)
 		self.metadata = MetaData()
-		self.tasks_table = table(self.metadata, self.table_name)
+		self.tasks_table = task_table(self.metadata, self.table_name)
 		self.logger = logger
 
 	async def create_table(self) -> None:
 		async with self.engine.begin() as conn:
 			await conn.run_sync(self.metadata.create_all)
-			self.logger.info("Table created successfully")
 
 	async def insert_task(self, task: TasksModel) -> tuple:
 		async with AsyncSession(self.engine) as conn:
