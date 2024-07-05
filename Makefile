@@ -1,5 +1,5 @@
 start-todo:
-	uvicorn src.main:app --reload --port 8006
+	uvicorn src.main:app --reload --port 8000
 
 test:
 	python -m pytest
