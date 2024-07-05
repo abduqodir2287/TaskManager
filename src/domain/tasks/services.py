@@ -15,7 +15,7 @@ class TaskRouterService:
         self.logger = logger
 
     async def get_tasks_service(self) -> AllTasks:
-        all_tasks = await self.functions.get_all_task_function()
+        all_tasks = await self.functions.get_all_task_redis_function()
         self.logger.info("Tasks sent successfully")
 
         return AllTasks(Tasks=all_tasks)

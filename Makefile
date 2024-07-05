@@ -1,5 +1,5 @@
-todo-run:
-	uvicorn src.main:app --reload --port 8004
+start-todo:
+	uvicorn src.main:app --reload --port 8006
 
 test:
 	python -m pytest
@@ -10,5 +10,5 @@ up:
 down:
 	docker-compose down
 
-linet:
+lint:
 	ruff check --fix

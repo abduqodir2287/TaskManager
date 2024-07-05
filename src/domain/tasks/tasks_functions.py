@@ -100,7 +100,7 @@ class TaskServiceFunctions:
 		self.logger.info("Task updated to Redis")
 
 
-	async def get_all_task_function(self) -> list:
+	async def get_all_task_redis_function(self) -> list:
 		keys = self.redis_client.get_keys()
 		tasks_list = []
 
@@ -108,6 +108,23 @@ class TaskServiceFunctions:
 			returned_task = self.redis_client.get(key)
 			tasks_list.append(json.loads(returned_task))
 
+		return tasks_list
+
+	async def get_all_task_function(self) -> list:
+		all_tasks = await self.db.select_all_tasks()
+		tasks_list = []
+
+		for task in all_tasks:
+			returned_task = {
+				"id": task.id,
+				"title": task.title,
+				"description": task.description,
+				"status": task.status,
+				"created_at": task.created_at,
+				"updated_at": task.updated_at
+			}
+			tasks_list.append(returned_task)
+		self.logger.info("Task sent from DB")
 		return tasks_list
 
 	async def get_by_id_function(self, task_id: int) -> TaskResponseForGet:
@@ -121,12 +138,12 @@ class TaskServiceFunctions:
 			raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
 		returned_task = TaskResponseForGet(
-			id=task_by_id[0],
-			title=task_by_id[1],
-			description=task_by_id[2],
-			status=task_by_id[3],
-			created_at=task_by_id[4].isoformat(),
-			updated_at=task_by_id[5].isoformat()
+			id=task_by_id.id,
+			title=task_by_id.title,
+			description=task_by_id.description,
+			status=task_by_id.status,
+			created_at=task_by_id.created_at,
+			updated_at=task_by_id.updated_at
 		)
 
 		self.redis_client.set(task_id, json.dumps(jsonable_encoder(returned_task)))
