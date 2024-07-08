@@ -19,8 +19,9 @@ class Settings(BaseSettings):
     LOG_BACKUP_COUNT: int
     LOG_WRITE_STATUS: bool
 
-# Замените env_file=".env" на env_file=".env.example" и напишите в .env.example свои данные,
+# Создайте .env файл и напишите туда свои данные,
 # Такие как DB_URL, APPLICATION_PORT и т.д.
+# С помощю команды cp .env.example .env в Терминале скопируйте в .env файл содержимое в .env.example файле
 
     @property
     def DATABASE_URL(self):

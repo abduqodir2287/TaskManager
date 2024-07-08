@@ -26,26 +26,25 @@ def test_for_get_tasks():
 def test_for_get_by_id_notfound():
 	response = client.get("/Tasks/1243")
 
-	assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-	assert response.json() == {"detail": "422: Task not found"}
+	assert response.status_code == status.HTTP_404_NOT_FOUND
+	assert response.json() == {"detail": "Task not found"}
 
 def test_for_get_by_id_success():
-	response = client.get("/Tasks/1")
-
+	response = client.get("/Tasks/2")
 	assert response.status_code == status.HTTP_200_OK
 
 
 def test_for_delete_task_notfound():
 	response = client.get("/Tasks/123423421")
 
-	assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-	assert response.json() == {"detail": "422: Task not found"}
+	assert response.status_code == status.HTTP_404_NOT_FOUND
+	assert response.json() == {"detail": "Task not found"}
 
 
 def test_for_delete_task_success():
 	response = client.get("/Tasks/1")
 
-	assert response.status_code == status.HTTP_200_OK
+	assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 def test_for_update_task_success():
@@ -62,4 +61,5 @@ def test_for_update_task_notfound():
 		"description": "sdgdfsg", "status": TaskStatus("completed")
 	})
 
-	assert response.status_code == status.HTTP_200_OK
+	assert response.status_code == status.HTTP_404_NOT_FOUND
+	assert response.json() == {"detail": "Task not found"}

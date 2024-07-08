@@ -5,7 +5,7 @@ from src.configs.config import settings
 
 
 # При запуске проекта в Docker,
-# Замените хост=settings.REDIS_HOST на хост=settings.DOCKER_REDIS_HOST.
+# Замените в .env файле REDIS_HOST=localhost на REDIS_HOST=redis.
 
 class RedisClient:
 	def __init__(self):

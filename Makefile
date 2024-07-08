@@ -12,3 +12,6 @@ down:
 
 lint:
 	ruff check --fix
+
+upgrade:
+	python -m alembic upgrade head

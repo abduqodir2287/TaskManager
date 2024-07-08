@@ -51,9 +51,18 @@
    Вам необходимо скопировать файл `env.example` в `.env` и заполнить его своими данными.
 
    ```sh
-   cp env.example .env
+   cp .env.example .env
 
+5. **Настройте Alembic для миграции:**
 
+    ```sh
+   make upgrade
+   
+6. **Если у вас нету make:**
+    ```sh
+   python -m alembic upgrade head
+    
+   
 ## Использование
 
 1. **Запустите приложение:**
@@ -61,7 +70,7 @@
    ```bash
    make start-todo
     ```
-2. **Если у вас его нет:**
+2. **Если у вас нету make:**
     ```bash
     uvicorn src.main:app --reload --port 8000
     ```

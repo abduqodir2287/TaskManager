@@ -14,6 +14,7 @@ async def lifespan_app(my_app: FastAPI):
 
 app = FastAPI(lifespan=lifespan_app)
 
+
 @app.get("/", response_model=GreetingsResponse, status_code=status.HTTP_200_OK)
 async def hello():
 	return {"Message": "Hello World"}

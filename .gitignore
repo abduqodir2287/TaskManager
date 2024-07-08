@@ -65,8 +65,6 @@ venv.bak/
 cython_debug/
 media/
 
-# Tests For Tasks Router
-.pytest_cache
 
 # Linet For Tasks Router
 /.ruff_cache
